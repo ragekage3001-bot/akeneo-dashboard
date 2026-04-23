@@ -10,11 +10,8 @@ st.set_page_config(layout="wide")
 if "df" not in st.session_state:
     st.session_state.df = None
 
-if "selected_attrs" not in st.session_state:
-    st.session_state.selected_attrs = []
-
 # -------------------------------
-# MOCK DATA
+# MOCK DATA GENERATOR
 # -------------------------------
 def generate_mock_data(n=200):
     families = ["doors", "windows", "handles"]
@@ -50,13 +47,12 @@ def generate_mock_data(n=200):
 # -------------------------------
 # SIDEBAR
 # -------------------------------
-st.sidebar.title("Demo")
+st.sidebar.title("Steuerung")
 
 if st.sidebar.button("🧪 Daten laden"):
     df, attrs = generate_mock_data(300)
-
     st.session_state.df = df
-    st.session_state.selected_attrs = attrs
+    st.session_state.attrs = attrs
 
 # -------------------------------
 # MAIN
@@ -64,9 +60,9 @@ if st.sidebar.button("🧪 Daten laden"):
 if st.session_state.df is not None:
 
     df = st.session_state.df
-    attrs = st.session_state.selected_attrs
+    attrs = st.session_state.attrs
 
-    st.title("📊 Data Quality Dashboard")
+    st.title("📊 Akeneo Data Quality Dashboard")
 
     # -------------------------------
     # SCORE
@@ -86,7 +82,7 @@ if st.session_state.df is not None:
     else:
         status = "🔴 Kritisch"
 
-    st.metric("Score", f"{score}/100")
+    st.metric("Datenqualität", f"{score}/100")
     st.write(status)
 
     # -------------------------------
@@ -96,9 +92,9 @@ if st.session_state.df is not None:
     st.bar_chart(df["family"].value_counts())
 
     # -------------------------------
-    # HEATMAP
+    # HEATMAP (STABIL + CLOUD SAFE)
     # -------------------------------
-    st.subheader("🔥 Heatmap")
+    st.subheader("🔥 Heatmap (Füllgrad in %)")
 
     grouped = df.groupby("family")
     result = []
@@ -108,25 +104,17 @@ if st.session_state.df is not None:
 
         for attr in attrs:
             pct = group[attr].notna().mean() * 100
-            row[attr] = pct
+            row[attr] = round(pct, 1)
 
         result.append(row)
 
     hm = pd.DataFrame(result).set_index("family")
 
-    styled = hm.style.background_gradient(cmap="RdYlGn").format("{:.1f}%")
-
-    st.write("🔥 Heatmap (Füllgrad in %)")
-
-styled = hm.style.background_gradient(cmap="RdYlGn").format("{:.1f}%")
-
-st.dataframe(
-    styled,
-    use_container_width=True
-)
+    # 👉 WICHTIG: OHNE Styler → stabil in Streamlit Cloud
+    st.dataframe(hm, use_container_width=True)
 
 else:
-    st.info("👉 Klick links auf 'Daten laden'")
+    st.info("👉 Bitte links auf 'Daten laden' klicken")
 streamlit
 pandas
 requests
