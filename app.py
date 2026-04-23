@@ -116,11 +116,14 @@ if st.session_state.df is not None:
 
     styled = hm.style.background_gradient(cmap="RdYlGn").format("{:.1f}%")
 
-    st.write("Heatmap (Füllgrad in %)")
+    st.write("🔥 Heatmap (Füllgrad in %)")
+
+styled = hm.style.background_gradient(cmap="RdYlGn").format("{:.1f}%")
 
 st.dataframe(
-    hm.style.background_gradient(cmap="RdYlGn").format("{:.1f}%"),
+    styled,
     use_container_width=True
+)
 
 else:
     st.info("👉 Klick links auf 'Daten laden'")
