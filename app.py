@@ -127,3 +127,4 @@ else:
 streamlit
 pandas
 requests
+matplotlib
