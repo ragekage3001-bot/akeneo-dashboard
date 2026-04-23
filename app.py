@@ -121,7 +121,7 @@ if st.session_state.df is not None:
 
 else:
     st.info("👉 Bitte links auf 'Daten laden' klicken")
-streamlit
+st
 pandas
 requests
 matplotlib
