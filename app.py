@@ -7,8 +7,14 @@ st.set_page_config(layout="wide")
 # -------------------------------
 # SESSION STATE
 # -------------------------------
+# -------------------------------
+# SESSION STATE
+# -------------------------------
 if "df" not in st.session_state:
     st.session_state.df = None
+
+if "attrs" not in st.session_state:
+    st.session_state.attrs = []
 
 # -------------------------------
 # MOCK DATA GENERATOR
